@@ -1,0 +1,67 @@
+<?php
+include 'dbconnect.php';
+
+$sql = "
+
+CREATE TABLE users (
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100) NOT NULL,
+email VARCHAR(100) UNIQUE NOT NULL,
+password VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE skills (
+skill_id INT AUTO_INCREMENT PRIMARY KEY,
+skill_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE user_skills (
+id INT AUTO_INCREMENT PRIMARY KEY,
+user_id INT,
+skill_id INT,
+type ENUM('teach','learn')
+);
+
+CREATE TABLE requests (
+request_id INT AUTO_INCREMENT PRIMARY KEY,
+sender_id INT,
+receiver_id INT,
+skill_wanted VARCHAR(100),
+status ENUM('pending','accepted','rejected') DEFAULT 'pending'
+);
+
+CREATE TABLE messages (
+id INT AUTO_INCREMENT PRIMARY KEY,
+sender_id INT,
+receiver_id INT,
+message TEXT,
+sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE sessions (
+id INT AUTO_INCREMENT PRIMARY KEY,
+user1 INT,
+user2 INT,
+skill VARCHAR(100),
+session_date DATE,
+session_time TIME,
+meeting_link VARCHAR(255),
+status VARCHAR(50)
+);
+
+CREATE TABLE reviews (
+id INT AUTO_INCREMENT PRIMARY KEY,
+session_id INT,
+reviewer_id INT,
+rating INT,
+feedback TEXT
+);
+
+";
+
+if ($conn->multi_query($sql)) {
+    echo "✅ Tables created successfully";
+} else {
+    echo "❌ Error: " . $conn->error;
+}
+?>
